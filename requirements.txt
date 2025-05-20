@@ -1,0 +1,7 @@
+numpy>=1.21
+cvxpy>=1.4
+geomstats>=2.6.1
+scikit-learn>=1.0
+keras>=2.11
+tensorflow>=2.11
+matplotlib>=3.5

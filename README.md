@@ -1,41 +1,64 @@
 # Coding Kendall's Shape Trajectories for 3D Action Recognition 
 
-The official PyTorch implementation of "[Coding Kendall's Shape Trajectories for 3D Action Recognition](https://openaccess.thecvf.com/content_cvpr_2018/html/Tanfous_Coding_Kendalls_Shape_CVPR_2018_paper.html) " (CVPR 2018). 
+This repository provides the official PyTorch and Keras implementation of the CVPR 2018 paper: [Coding Kendall's Shape Trajectories for 3D Action Recognition](https://openaccess.thecvf.com/content_cvpr_2018/html/Tanfous_Coding_Kendalls_Shape_CVPR_2018_paper.html).
 
-In addition to the Sparse Coding and classification pipeline described in the paper, this code includes a data augmentation framework based on GANs to generate new sparse codes. This step further improved experimental results on the three datasets. 
 
-## Summary
+## Overview
 
-> Suitable shape representations as well as their temporal evolution, termed trajectories, often lie to non-linear manifolds. This puts an additional constraint (ie, non-linearity) in using conventional machine learning techniques for the purpose of classification, event detection, prediction, etc. This paper accommodates the well-known Sparse Coding and Dictionary Learning to the Kendall's shape space and illustrates effective coding of 3D skeletal sequences for action recognition. Grounding on the Riemannian geometry of the shape space, an intrinsic sparse coding and dictionary learning formulation is proposed for static skeletal shapes to overcome the inherent non-linearity of the manifold. As a main result, initial trajectories give rise to sparse code functions with suitable computational properties, including sparsity and vector space representation. To achieve action recognition, two different classification schemes were adopted. A bi-directional LSTM is directly performed on sparse code functions, while a linear SVM is applied after representing sparse code functions using Fourier temporal pyramid. Experiments conducted on three publicly available datasets show the superiority of the proposed approach compared to existing Riemannian representations and its competitiveness with respect to other recently-proposed approaches. When the benefits of invariance are maintained from the Kendall's shape representation, our approach not only overcomes the problem of non-linearity but also yields to discriminative sparse code functions.
+> 3D skeletal data is naturally represented as a sequence of shapes evolving over time. These sequences lie on non-linear manifolds, making standard machine learning approaches less effective. This work introduces a novel approach for encoding such trajectories using:
 
-### Requirements
+- Kendall's shape space geometry
+- Intrinsic sparse coding using convex optimization
+- Temporal encoding using either:
+    - Bi-directional LSTMs (learned end-to-end)
+    - Fourier Temporal Pyramid with linear SVM
 
+This manifold-aware pipeline yields sparse, discriminative, and vector-space-compatible representations for human action recognition.
+
+
+## Installation
+```bash
+pip install -r requirements.txt
 ```
-pytorch(0.3.1)
-torchvision(0.2.0)
-keras
-cvxpy
-numpy
-scipy
-joblib
+
+## Usage
+
+### Preprocessing and Sparse Coding
+The data is expected in the format of centered and scaled 3D joint positions per frame. To compute sparse codes for each shape sequence:
+```bash
+from sparse_coding import sparse_coding
+# Provide list of shape sequences and a learned dictionary
+sparse_coding(sequences, dictionary, lam, output_dir)
 ```
 
-### Citation 
-Please consider citing this work if you use our code in your research:
+You can use sparse_coding_parallel() for multiprocessing.
 
+### LSTM Classification
+Train and evaluate a bidirectional LSTM on the sparse codes:
+
+```bash
+from lstm_model import bi_lstm
+accuracy, scores = bi_lstm(opt, data, subject_labels, action_labels)
+```
+
+Ensure opt is a `config` object with fields like:
+- `n_classes`
+- `train_subjects`
+- `lstm_size`
+- `dropout_prob`
+- `nb_epochs`
+- `b_size`
+
+
+## Citation 
+If you use this codebase in your research, please cite:
 
 ``` 
 @inproceedings{ben2018coding,
-
   title={Coding Kendall's shape trajectories for 3D action recognition},
-  
   author={Ben Tanfous, Amor and Drira, Hassen and Ben Amor, Boulbaba},
-  
   booktitle={Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
-  
   pages={2840--2849},
-  
   year={2018}
-  
 }
 ```
