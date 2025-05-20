@@ -5,7 +5,7 @@ This repository provides the official PyTorch and Keras implementation of the CV
 
 ## Overview
 
-> 3D skeletal data is naturally represented as a sequence of shapes evolving over time. These sequences lie on non-linear manifolds, making standard machine learning approaches less effective. This work introduces a novel approach for encoding such trajectories using:
+3D skeletal data is naturally represented as a sequence of shapes evolving over time. These sequences lie on non-linear manifolds, making standard machine learning approaches less effective. This work introduces a novel approach for encoding such trajectories using:
 - Kendall's shape space geometry
 - Intrinsic sparse coding using convex optimization
 - Temporal encoding using either:
